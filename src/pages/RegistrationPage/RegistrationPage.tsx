@@ -1,8 +1,7 @@
 // import "./RegistrationPage.scss";
-import { Input, Button, Heading, RegistrationInfo } from "../../components/UI";
+import { Heading, RegistrationInfo } from "../../components/UI";
 import { SCRegistrationPage } from "./RegistrationPage.styled";
-import RegForm from "../../components/RegForm";
-import { useRegDataMutation } from "../../store/api/authApi";
+import RegForm from "../../components/forms/RegForm";
 
 export const RegistrationPage = () => {
   return (

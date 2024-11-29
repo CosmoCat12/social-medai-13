@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import CommentBlock from "./CommentBlock";
+import { UpdatePostFormModal } from "../forms/UpdatePostFormModal";
 
 interface IPostProps {
   name: string;
@@ -13,6 +14,7 @@ interface IPostProps {
   ];
   postId?: number;
   comments?: string[];
+  isOwner: boolean;
 }
 
 const Post = ({
@@ -22,6 +24,7 @@ const Post = ({
   photos,
   postId,
   comments,
+  isOwner,
 }: IPostProps) => {
   return (
     <div className="Post _liked _marked">
@@ -35,6 +38,8 @@ const Post = ({
         </div>
         <div>
           {postId && <Link to={`/post/${postId}`}>Перейти к посту</Link>}
+          {isOwner && <UpdatePostFormModal postId={postId!} />}
+          {isOwner && <p style={{ cursor: "pointer" }}>Удалить</p>}
         </div>
       </div>
       <p className="Post__text">{postText}</p>

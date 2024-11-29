@@ -1,9 +1,9 @@
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Button, Input } from "./UI";
+import { Button, Input } from "../UI";
 import { useNavigate } from "react-router-dom";
-import { useLoginUserMutation } from "../store/api/authApi";
+import { useLoginUserMutation } from "../../store/api/authApi";
 import { useUser } from "@clerk/clerk-react";
 import { useEffect } from "react";
 
@@ -39,20 +39,29 @@ const LoginForm = () => {
   });
 
   const navigate = useNavigate();
-  const [loginUser, {data: loginData}] = useLoginUserMutation();
-  const { user } = useUser();
-  const userId = localStorage.getItem('userId');
+  const [loginUser, { data: loginData }] = useLoginUserMutation();
+  const { isSignedIn } = useUser();
+  const userId = localStorage.getItem("userId");
 
-  useEffect(()=>{
-    if (user||userId) {
-      navigate("/main")
+  console.log("loginData :>> ", loginData);
+
+  useEffect(() => {
+    if (loginData?.message) {
+      localStorage.removeItem("userId");
+      alert(loginData.message);
     }
-  }, [user, userId]);
+    if (loginData?.user_id) {
+      localStorage.setItem("userId", JSON.stringify(loginData?.user_id));
+      console.log("I'm navigating to main");
+      navigate("/main");
+    }
+    if (isSignedIn || userId) {
+      navigate("/main");
+    }
+  }, [isSignedIn, loginData, userId]);
 
   const onSubmit: SubmitHandler<ILoginForm> = (data) => {
     loginUser({ email: data.email, password: data.password });
-    localStorage.setItem("userId", JSON.stringify(loginData?.user_id)); 
-    navigate("/main");
   };
 
   return (

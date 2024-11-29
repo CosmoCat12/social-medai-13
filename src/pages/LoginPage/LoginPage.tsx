@@ -1,7 +1,7 @@
 import { Heading, RegistrationInfo } from "../../components/UI";
 import { Link } from "react-router-dom";
 import { SCLoginPage } from "./LoginPage.styled";
-import LoginForm from "../../components/LoginForm";
+import LoginForm from "../../components/forms/LoginForm";
 
 export const LoginPage = () => {
   return (

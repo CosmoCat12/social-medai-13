@@ -28,7 +28,8 @@ export interface IGetUserResponse {
 }
 
 export interface ILoginUserResponce {
-  status: number;
+  message: string;
+  status: 1 | 0;
   user_id: number;
 }
 
@@ -110,5 +111,4 @@ export interface ISubscriber {
     bs: string;
   };
 }
-export type IGetSubscribersResponce = ISubscriber[]
-
+export type IGetSubscribersResponce = ISubscriber[];

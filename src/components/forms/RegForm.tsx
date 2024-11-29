@@ -1,9 +1,9 @@
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Button, Input } from "./UI";
+import { Button, Input } from "../UI";
 import { useNavigate } from "react-router-dom";
-import { useRegDataMutation } from "../store/api/authApi";
+import { useRegDataMutation } from "../../store/api/authApi";
 import { useUser } from "@clerk/clerk-react";
 import { useEffect } from "react";
 
@@ -48,15 +48,24 @@ const RegForm = () => {
   });
 
   const navigate = useNavigate();
-  const [registerUser, { data }] = useRegDataMutation();
-  const { user } = useUser();
+  const [registerUser, { data: registrationData }] = useRegDataMutation();
+  const { isSignedIn } = useUser();
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    if (user || userId) {
-      navigate("/");
+    if (registrationData?.message) {
+      localStorage.removeItem("userId");
+      alert(registrationData?.message);
     }
-  }, [user, userId]);
+    if (registrationData?.user_id) {
+      localStorage.setItem("userId", JSON.stringify(registrationData?.user_id));
+      console.log("I'm navigating to main");
+      navigate("/main");
+    }
+    if (isSignedIn || userId) {
+      navigate("/main");
+    }
+  }, [isSignedIn, registerUser, userId]);
   const onSubmit: SubmitHandler<ILoginForm> = (data) => {
     registerUser({
       email: data.email,
@@ -65,7 +74,6 @@ const RegForm = () => {
       phone_number: data.phone,
       user_city: data.city,
     });
-    navigate("/main");
   };
 
   return (
